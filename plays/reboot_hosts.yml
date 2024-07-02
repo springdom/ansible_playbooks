@@ -1,0 +1,17 @@
+- name: Reboot hosts one at a time
+  hosts: all
+  serial: 1
+  tasks:
+    - name: Reboot the server
+      reboot:
+        msg: "Reboot initiated by Ansible"
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        reboot_timeout: 600
+
+    - name: Wait for the server to come back online
+      wait_for:
+        port: 22
+        timeout: 300
+        state: started
+        delay: 10
