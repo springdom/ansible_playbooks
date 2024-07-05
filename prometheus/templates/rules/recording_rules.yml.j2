@@ -1,0 +1,5 @@
+groups:
+- name: example
+  rules:
+  - record: job:avg_cpu_usage:rate5m
+    expr: avg by (job) (rate(node_cpu_seconds_total{mode!="idle"}[5m]))

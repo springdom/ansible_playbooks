@@ -1,0 +1,75 @@
+groups:
+- name: example
+  rules:
+  - alert: HighCPUUsage
+    expr: avg by (instance) (rate(node_cpu_seconds_total{mode!="idle"}[5m])) > 0.8
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High CPU usage detected on instance {{ $labels.instance }}"
+      description: "CPU usage is above 80% for more than 5 minutes."
+
+  - alert: DiskSpaceUsage
+    expr: (node_filesystem_size_bytes{fstype!="tmpfs",fstype!="rootfs"} - node_filesystem_free_bytes{fstype!="tmpfs",fstype!="rootfs"}) / node_filesystem_size_bytes{fstype!="tmpfs",fstype!="rootfs"} * 100 > 80
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Disk space usage is above 80% on instance {{ $labels.instance }}"
+      description: "Disk space usage is above 80% for more than 5 minutes on {{ $labels.instance }}."
+
+  - alert: HighMemoryUsage
+    expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 90
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High memory usage detected on instance {{ $labels.instance }}"
+      description: "Memory usage is above 90% for more than 5 minutes on {{ $labels.instance }}."
+
+  - alert: HighNetworkTraffic
+    expr: rate(node_network_receive_bytes_total[5m]) > 10000000
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High network traffic detected on instance {{ $labels.instance }}"
+      description: "Received network traffic is above 10MB/s for more than 5 minutes on {{ $labels.instance }}."
+
+  - alert: InstanceDown
+    expr: up == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Instance {{ $labels.instance }} is down"
+      description: "Instance {{ $labels.instance }} has been down for more than 5 minutes."
+
+  - alert: HighCPULoad
+    expr: node_load1 / node_cpu_seconds_total{mode="idle"} > 0.85
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High CPU load detected on instance {{ $labels.instance }}"
+      description: "CPU load is above 85% for more than 5 minutes on {{ $labels.instance }}."
+
+  - alert: HighFileDescriptors
+    expr: node_filefd_allocated{instance=~"webserver:.*|dbserver:.*"} / node_filefd_maximum > 0.9
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High number of open file descriptors on {{ $labels.instance }}"
+      description: "The number of open file descriptors is above 90% of the limit for more than 5 minutes on {{ $labels.instance }}."
+
+  - alert: HighHttpLatency
+    expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 0.5
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High HTTP latency on {{ $labels.instance }}"
+      description: "The 95th percentile HTTP request latency is above 0.5 seconds for more than 5 minutes on {{ $labels.instance }}."
+
