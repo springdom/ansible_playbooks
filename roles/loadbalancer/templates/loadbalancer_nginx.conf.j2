@@ -38,7 +38,7 @@ http {
 
     server {
         listen 80;
-        server_name simpleblog.example.com;
+        server_name {{ simple_url }};
 
         location / {
             proxy_pass http://simpleblog;
@@ -52,7 +52,7 @@ http {
 
     server {
         listen 80;
-        server_name api.example.com;
+        server_name {{ api_url }};
 
         location / {
             proxy_pass http://api;
