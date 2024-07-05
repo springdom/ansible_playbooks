@@ -1,1 +1,95 @@
-inventory
+# Ansible-related files
+*.retry
+*.vault_password
+*.vault_pass
+*.log
+
+# Ignore the inventory directory if it contains sensitive information
+inventory/*
+!inventory/production
+!inventory/staging
+
+# Ignore Ansible facts cache
+fact_cache/
+fact_cache/*
+
+# Ignore any .vault_pass.txt file
+.vault_pass.txt
+
+# Ignore environment configuration files
+.env
+*.env
+
+# Python related
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyo
+*.pyd
+*.pyd
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv/
+.env/
+
+# IDE and Editor related
+.vscode/
+.idea/
+*.swp
+*~
+*.sublime-project
+*.sublime-workspace
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+*.tmp
+
+# Logs
+*.log
+logs/
+
+# Files generated during build process
+build/
+dist/
+*.bak
+*.backup
+
+# Coverage reports
+coverage/
+.coverage
+.cache
+
+# Ignore test result files
+test-results/
+junit-report.xml
+
+# Ignore Ansible linting cache
+.ansible-lint-cache/
+
+# Ignore Molecule related files
+.molecule/
+
+# Ignore encrypted files if not tracked
+*.vault.yml
+*.enc
+
+# Ignore secrets and credentials
+secrets.yml
+.credentials
+
