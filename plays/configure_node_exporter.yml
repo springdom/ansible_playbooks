@@ -1,0 +1,28 @@
+---
+- name: Configure firewall and ensure Node Exporter is running
+  hosts: all
+  tasks:
+    - name: Allow port 9100 in the firewall
+      firewalld:
+        port: 9100/tcp
+        permanent: yes
+        state: enabled
+
+    - name: Reload the firewall
+      command: firewall-cmd --reload
+      ignore_errors: yes
+
+    - name: Ensure Node Exporter is running
+      systemd:
+        name: node_exporter
+        state: started
+        enabled: yes
+
+    - name: Check Node Exporter status
+      command: systemctl status node_exporter
+      register: node_exporter_status
+      ignore_errors: yes
+
+    - name: Debug Node Exporter status
+      debug:
+        var: node_exporter_status.stdout_lines

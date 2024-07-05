@@ -1,0 +1,7 @@
+- name: Customize the message of the day
+  hosts: all
+  tasks:
+    - name: passwordless sudoers
+      copy:
+        content: "mtaylor ALL=(ALL)  NOPASSWD:ALL"
+        dest: /etc/sudoers.d/mtaylor

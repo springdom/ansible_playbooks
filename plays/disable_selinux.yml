@@ -1,0 +1,23 @@
+---
+- name: Disable SELinux permanently
+  hosts: all
+  tasks:
+    - name: Ensure SELinux is set to permissive mode immediately
+      command: setenforce 0
+      ignore_errors: yes
+
+    - name: Disable SELinux permanently in the configuration file
+      replace:
+        path: /etc/selinux/config
+        regexp: '^SELINUX=.*'
+        replace: 'SELINUX=disabled'
+      notify:
+        - Reboot system
+
+  handlers:
+    - name: Reboot system
+      reboot:
+        msg: "Rebooting to apply SELinux configuration change"
+        pre_reboot_delay: 5
+        post_reboot_delay: 30
+        reboot_timeout: 600

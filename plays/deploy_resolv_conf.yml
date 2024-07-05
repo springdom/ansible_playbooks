@@ -1,0 +1,30 @@
+---
+- name: Ensure resolv.conf has custom DNS settings
+  hosts: all
+  become: yes
+  tasks:
+    - name: Backup existing resolv.conf
+      copy:
+        src: /etc/resolv.conf
+        dest: /etc/resolv.conf.bak
+        backup: yes
+
+    - name: Ensure resolv.conf is mutable to allow changes
+      command: chattr -i /etc/resolv.conf
+      ignore_errors: yes
+
+    - name: Overwrite resolv.conf with custom DNS settings
+      copy:
+        content: |
+          nameserver 192.168.1.181  # IP of your DNS server (dnsmasq server)
+        dest: /etc/resolv.conf
+
+    - name: Ensure resolv.conf is immutable to prevent changes
+      command: chattr +i /etc/resolv.conf
+
+    - name: Verify resolv.conf settings
+      command: cat /etc/resolv.conf
+      register: resolv_conf_output
+
+    - debug:
+        var: resolv_conf_output.stdout_lines
